@@ -13,19 +13,21 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import { DevToolsModal } from "@assistant-ui/react-devtools";
 
 export const Assistant = () => {
   const runtime = useChatRuntime({
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     transport: new AssistantChatTransport({
-      api: "/api/chat",
-    }),
+      api: "/api/chat"
+    })
   });
 
   return (
     <AssistantRuntimeProvider runtime={runtime}>
+      <DevToolsModal />
       <SidebarProvider>
         <div className="flex h-dvh w-full pr-0.5">
           <ThreadListSidebar />
