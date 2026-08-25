@@ -2,10 +2,19 @@ This is the [assistant-ui](https://github.com/assistant-ui/assistant-ui) starter
 
 ## Getting Started
 
-First, add your OpenAI API key to `.env.local` file:
+First, add your Alibaba Cloud Model Studio (DashScope) API key to `.env.local`:
 
 ```
-OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+The app uses Qwen's OpenAI-compatible Chat Completions endpoint and defaults to
+`qwen-plus`. To use a different Qwen model or the recommended workspace-specific
+endpoint, add these optional settings:
+
+```
+QWEN_MODEL=qwen-plus
+DASHSCOPE_BASE_URL=https://YOUR_WORKSPACE_ID.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
 ```
 
 Then, run the development server:
