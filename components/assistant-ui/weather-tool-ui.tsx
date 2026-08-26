@@ -2,7 +2,6 @@
 
 import type { ElementType } from "react";
 import type { ToolCallMessagePartComponent } from "@assistant-ui/react";
-import { defineToolkit } from "@assistant-ui/react";
 import {
   AlertCircleIcon,
   CloudFogIcon,
@@ -34,10 +33,7 @@ const weatherIconForCode = (code: number) => {
   if (code === 2) return CloudSunIcon;
   if (code === 3) return CloudIcon;
   if (code === 45 || code === 48) return CloudFogIcon;
-  if (
-    (code >= 51 && code <= 67) ||
-    (code >= 80 && code <= 82)
-  ) {
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
     return CloudRainIcon;
   }
   if ((code >= 71 && code <= 77) || code === 85 || code === 86) {
@@ -187,10 +183,3 @@ export const WeatherToolUI: ToolCallMessagePartComponent<WeatherArgs, WeatherRes
 
   return <WeatherCard result={result} />;
 };
-
-export const weatherToolkit = defineToolkit({
-  get_weather: {
-    type: "backend",
-    render: WeatherToolUI,
-  },
-});

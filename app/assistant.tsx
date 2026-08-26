@@ -8,7 +8,7 @@ import {
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { Thread } from "@/components/assistant-ui/thread";
-import { weatherToolkit } from "@/components/assistant-ui/weather-tool-ui";
+import toolkit from "@/lib/weather-toolkit";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -18,20 +18,20 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator
+  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
 
 const config = AuiConfig({
-  tools: Tools({ toolkit: weatherToolkit }),
+  tools: Tools({ toolkit }),
 });
 
 export const Assistant = () => {
   const runtime = useChatRuntime({
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     transport: new AssistantChatTransport({
-      api: "/api/chat"
-    })
+      api: "/api/chat",
+    }),
   });
 
   return (

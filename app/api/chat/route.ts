@@ -1,15 +1,14 @@
 import { createOpenAI } from "@ai-sdk/openai";
-import { frontendTools } from "@assistant-ui/ai-sdk";
-import { getWeather } from "@/lib/weather";
+import { AISDKToolkit, type FrontendTools } from "@assistant-ui/ai-sdk";
+import toolkit from "@/lib/weather-toolkit";
 import {
-  type JSONSchema7,
   streamText,
   convertToModelMessages,
   type UIMessage,
-  jsonSchema,
   stepCountIs,
-  tool,
 } from "ai";
+
+const aiToolkit = new AISDKToolkit({ toolkit });
 
 export async function POST(req: Request) {
   const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -31,14 +30,16 @@ export async function POST(req: Request) {
   }: {
     messages: UIMessage[];
     system?: string;
-    tools?: Record<string, { description?: string; parameters: JSONSchema7 }>;
+    tools?: FrontendTools;
   } = await req.json();
 
   const qwen = createOpenAI({
     name: "qwen",
     apiKey,
     // Configure a workspace-specific endpoint with DASHSCOPE_BASE_URL when available.
-    baseURL: process.env.DASHSCOPE_BASE_URL ?? "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    baseURL:
+      process.env.DASHSCOPE_BASE_URL ??
+      "https://dashscope.aliyuncs.com/compatible-mode/v1",
   });
 
   const result = streamText({
@@ -46,25 +47,7 @@ export async function POST(req: Request) {
     model: qwen.chat(process.env.QWEN_MODEL ?? "qwen-plus"),
     messages: await convertToModelMessages(messages),
     system,
-    tools: {
-      ...frontendTools(tools ?? {}),
-      get_weather: tool({
-        description:
-          "获取指定城市或地区的实时天气。用户询问当前、今天或此刻的天气、温度、降雨或风力时调用。location 必须是明确的城市或地区名称；不要臆测天气。",
-        inputSchema: jsonSchema<{ location: string }>({
-          type: "object",
-          properties: {
-            location: {
-              type: "string",
-              description: "要查询天气的城市或地区名称，例如：北京、上海浦东、Tokyo。",
-            },
-          },
-          required: ["location"],
-          additionalProperties: false,
-        }),
-        execute: getWeather,
-      }),
-    },
+    tools: await aiToolkit.tools({ frontend: tools }),
     // Continue after the server-side weather tool returns so the model can answer the user.
     stopWhen: stepCountIs(5),
   });
