@@ -17,6 +17,9 @@ QWEN_MODEL=qwen-plus
 DASHSCOPE_BASE_URL=https://YOUR_WORKSPACE_ID.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
 ```
 
+The chat route includes a `get_weather` tool backed by Open-Meteo. It looks up a
+city or region and returns current conditions without requiring another API key.
+
 Then, run the development server:
 
 ```bash

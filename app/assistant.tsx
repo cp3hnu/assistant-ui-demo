@@ -1,9 +1,14 @@
 "use client";
 
-import { AssistantRuntimeProvider } from "@assistant-ui/react";
+import {
+  AssistantRuntimeProvider,
+  AuiConfig,
+  Tools,
+} from "@assistant-ui/react";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { Thread } from "@/components/assistant-ui/thread";
+import { weatherToolkit } from "@/components/assistant-ui/weather-tool-ui";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -17,6 +22,10 @@ import {
 } from "@/components/ui/breadcrumb";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
 
+const config = AuiConfig({
+  tools: Tools({ toolkit: weatherToolkit }),
+});
+
 export const Assistant = () => {
   const runtime = useChatRuntime({
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
@@ -26,7 +35,7 @@ export const Assistant = () => {
   });
 
   return (
-    <AssistantRuntimeProvider runtime={runtime}>
+    <AssistantRuntimeProvider runtime={runtime} config={config}>
       <DevToolsModal />
       <SidebarProvider>
         <div className="flex h-dvh w-full pr-0.5">
