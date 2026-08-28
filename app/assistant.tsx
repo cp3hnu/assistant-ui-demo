@@ -1,14 +1,10 @@
 "use client";
 
-import {
-  AssistantRuntimeProvider,
-  AuiConfig,
-  Tools,
-} from "@assistant-ui/react";
+import { AssistantRuntimeProvider, AuiConfig, Tools } from "@assistant-ui/react";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { Thread } from "@/components/assistant-ui/thread";
-import toolkit from "@/lib/weather-toolkit";
+import weatherToolkit from "@/lib/weather-toolkit";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -18,20 +14,25 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
+  BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
-
-const config = AuiConfig({
-  tools: Tools({ toolkit }),
-});
+import toolkit from "@/lib/toolkit";
 
 export const Assistant = () => {
   const runtime = useChatRuntime({
     sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
     transport: new AssistantChatTransport({
-      api: "/api/chat",
-    }),
+      api: "/api/chat"
+    })
+  });
+  const config = AuiConfig({
+    tools: Tools({
+      toolkit: {
+        ...toolkit,
+        ...weatherToolkit
+      }
+    })
   });
 
   return (
