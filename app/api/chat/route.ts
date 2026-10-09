@@ -1,14 +1,10 @@
-import { createOpenAI } from "@ai-sdk/openai";
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { AISDKToolkit, type FrontendTools } from "@assistant-ui/ai-sdk";
-import weatherToolkit from "@/lib/weather-toolkit";
+import toolkit from "@/tools";
 import { streamText, convertToModelMessages, type UIMessage, stepCountIs } from "ai";
-import toolkit from "@/lib/toolkit";
 
 const aiToolkit = new AISDKToolkit({
-  toolkit: {
-    ...toolkit,
-    ...weatherToolkit
-  }
+  toolkit: toolkit
 });
 
 export async function POST(req: Request) {
@@ -33,19 +29,23 @@ export async function POST(req: Request) {
     tools?: FrontendTools;
   } = await req.json();
 
-  const qwen = createOpenAI({
+  const qwen = createOpenAICompatible({
     name: "qwen",
     apiKey,
-    // Configure a workspace-specific endpoint with DASHSCOPE_BASE_URL when available.
     baseURL: process.env.DASHSCOPE_BASE_URL ?? "https://dashscope.aliyuncs.com/compatible-mode/v1"
   });
 
   const result = streamText({
-    // DashScope provides an OpenAI-compatible Chat Completions endpoint.
-    model: qwen.chat(process.env.QWEN_MODEL ?? "qwen-plus"),
+    model: qwen(process.env.QWEN_MODEL ?? "qwen-plus"),
     messages: await convertToModelMessages(messages),
     system,
     tools: await aiToolkit.tools({ frontend: tools }),
+    // DashScope non-standard field; keyed by createOpenAICompatible `name`.
+    providerOptions: {
+      qwen: {
+        enable_thinking: true
+      }
+    },
     // Continue after the server-side weather tool returns so the model can answer the user.
     stopWhen: stepCountIs(10)
   });

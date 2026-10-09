@@ -4,7 +4,7 @@ import { AssistantRuntimeProvider, AuiConfig, Tools } from "@assistant-ui/react"
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { Thread } from "@/components/assistant-ui/thread";
-import weatherToolkit from "@/lib/weather-toolkit";
+import toolkit from "@/tools";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -17,7 +17,6 @@ import {
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
-import toolkit from "@/lib/toolkit";
 
 export const Assistant = () => {
   const runtime = useChatRuntime({
@@ -28,10 +27,7 @@ export const Assistant = () => {
   });
   const config = AuiConfig({
     tools: Tools({
-      toolkit: {
-        ...toolkit,
-        ...weatherToolkit
-      }
+      toolkit: toolkit
     })
   });
 
