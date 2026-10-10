@@ -4,7 +4,7 @@ import { defineToolkit } from "@assistant-ui/react";
 import {
   JSONGenerativeUI,
   defaultGenerativeUILibrary,
-  defineGenerativeComponents
+  defineGenerativeComponents,
 } from "@assistant-ui/react-generative-ui";
 import { styledGenerativeUILibrary } from "@/components/assistant-ui/generative-ui";
 
@@ -17,12 +17,12 @@ const generative = new JSONGenerativeUI({
         properties: markdown.properties,
         streamProperties: markdown.streamProperties,
         description: "A markdown string, rendered with GitHub-flavored markdown.",
-        render: styledGenerativeUILibrary.Markdown!.render
-      }
-    })
-  }
+        render: styledGenerativeUILibrary.Markdown!.render,
+      },
+    }),
+  },
 });
 
 export default defineToolkit({
-  present: generative.present({ display: "standalone" })
+  present: generative.present({ display: "standalone" }),
 });
