@@ -1,8 +1,10 @@
-This is the [assistant-ui](https://github.com/assistant-ui/assistant-ui) starter project.
+# My Assistant
+
+Personal assistant app built with [assistant-ui](https://www.assistant-ui.com) and Next.js.
 
 ## Getting Started
 
-First, add your Alibaba Cloud Model Studio (DashScope) API key to `.env.local`:
+Add your Alibaba Cloud Model Studio (DashScope) API key to `.env.local`:
 
 ```
 DASHSCOPE_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -17,21 +19,10 @@ QWEN_MODEL=qwen-plus
 DASHSCOPE_BASE_URL=https://YOUR_WORKSPACE_ID.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
 ```
 
-The chat route includes a `get_weather` tool backed by Open-Meteo. It looks up a
-city or region and returns current conditions without requiring another API key.
-
-Then, run the development server:
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3001](http://localhost:3001) with your browser.
