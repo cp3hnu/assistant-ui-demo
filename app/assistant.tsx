@@ -1,6 +1,11 @@
 "use client";
 
-import { AssistantRuntimeProvider, AuiConfig, Tools } from "@assistant-ui/react";
+import {
+  AssistantRuntimeProvider,
+  AuiConfig,
+  Tools,
+  useRemoteThreadListRuntime,
+} from "@assistant-ui/react";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
 import { lastAssistantMessageIsCompleteWithToolCalls } from "ai";
 import { Thread } from "@/components/assistant-ui/thread";
@@ -9,18 +14,24 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
+import { threadListAdapter } from "@/lib/assistant/thread-adapter";
 
 export const Assistant = () => {
-  const runtime = useChatRuntime({
-    sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
-    transport: new AssistantChatTransport({
-      api: "/api/chat"
-    })
+  const runtime = useRemoteThreadListRuntime({
+    runtimeHook: () =>
+      useChatRuntime({
+        sendAutomaticallyWhen: lastAssistantMessageIsCompleteWithToolCalls,
+        transport: new AssistantChatTransport({
+          api: "/api/chat",
+        }),
+      }),
+    adapter: threadListAdapter,
   });
+
   const config = AuiConfig({
     tools: Tools({
-      toolkit: toolkit
-    })
+      toolkit: toolkit,
+    }),
   });
 
   return (
