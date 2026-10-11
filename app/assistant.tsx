@@ -4,6 +4,7 @@ import {
   AssistantRuntimeProvider,
   AuiConfig,
   Tools,
+  useAssistantInstructions,
   useRemoteThreadListRuntime,
 } from "@assistant-ui/react";
 import { useChatRuntime, AssistantChatTransport } from "@assistant-ui/ai-sdk";
@@ -15,6 +16,12 @@ import { ThreadListSidebar } from "@/components/assistant-ui/threadlist-sidebar"
 import { Separator } from "@/components/ui/separator";
 import { DevToolsModal } from "@assistant-ui/react-devtools";
 import { threadListAdapter } from "@/lib/assistant/thread-adapter";
+import { PRESENT_SYSTEM_INSTRUCTIONS } from "@/lib/present-instructions";
+
+const PresentInstructions = () => {
+  useAssistantInstructions(PRESENT_SYSTEM_INSTRUCTIONS);
+  return null;
+};
 
 export const Assistant = () => {
   const runtime = useRemoteThreadListRuntime({
@@ -36,6 +43,7 @@ export const Assistant = () => {
 
   return (
     <AssistantRuntimeProvider runtime={runtime} config={config}>
+      <PresentInstructions />
       <DevToolsModal />
       <SidebarProvider>
         <div className="flex h-dvh w-full pr-0.5">
