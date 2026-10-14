@@ -59,6 +59,9 @@ import { unstable_useMentionAdapter } from "@assistant-ui/react";
 import { WrenchIcon } from "lucide-react";
 import { unstable_useSlashCommandAdapter, type Unstable_SlashCommand } from "@assistant-ui/react";
 import { FileTextIcon, GlobeIcon, SlashIcon } from "lucide-react";
+import { LexicalComposerInput, type DirectiveChipProps } from "@assistant-ui/react-lexical";
+import { Badge } from "@/components/assistant-ui/badge";
+import { DirectiveText } from "@/components/assistant-ui/directive-text";
 
 export type ThreadGroupPart = MessagePrimitive.GroupedParts.GroupPart;
 
@@ -255,13 +258,12 @@ const Composer: FC = () => {
           }
         >
           <ComposerAttachments />
-          <ComposerPrimitive.Input
+          <LexicalComposerInput
             placeholder="Send a message..."
-            className="aui-composer-input caret-primary placeholder:text-muted-foreground/60 max-h-48 min-h-10 w-full resize-none bg-transparent px-2.5 py-1 text-base leading-6 outline-none"
-            rows={1}
+            className="aui-composer-input max-h-48 min-h-10 w-full bg-transparent text-base leading-6"
             autoFocus
-            enterKeyHint="send"
             aria-label="Message input"
+            directiveChip={ComposerDirectiveChip}
           />
           <ComposerAction />
           <MentionAdapter />
@@ -526,7 +528,9 @@ const UserMessage: FC = () => {
 
       <div className="aui-user-message-content-wrapper relative col-start-2 min-w-0">
         <div className="aui-user-message-content peer bg-muted text-foreground rounded-xl px-4 py-2 wrap-break-word empty:hidden">
-          <MessagePrimitive.Parts components={{ File: UserFilePart, Image: UserImagePart }} />
+          <MessagePrimitive.Parts
+            components={{ Text: DirectiveText, File: UserFilePart, Image: UserImagePart }}
+          />
         </div>
         <div className="aui-user-action-bar-wrapper absolute start-0 top-1/2 -translate-x-full -translate-y-1/2 pe-2 peer-empty:hidden rtl:translate-x-full">
           <UserActionBar />
@@ -562,9 +566,11 @@ const EditComposer: FC = () => {
       className="flex flex-col px-2 [contain-intrinsic-size:auto_200px] [content-visibility:auto]"
     >
       <ComposerPrimitive.Root className="aui-edit-composer-root border-border/60 dark:border-muted-foreground/15 ms-auto flex w-full max-w-[85%] cursor-text flex-col rounded-(--composer-radius) border bg-(--composer-bg)">
-        <ComposerPrimitive.Input
-          className="aui-edit-composer-input text-foreground min-h-14 w-full resize-none bg-transparent px-4 pt-3 pb-1 text-base outline-none"
+        <LexicalComposerInput
+          className="aui-edit-composer-input text-foreground min-h-14 w-full bg-transparent text-base"
           autoFocus
+          aria-label="Edit message"
+          directiveChip={ComposerDirectiveChip}
         />
         <div className="aui-edit-composer-footer mx-2.5 mb-2.5 flex items-center gap-1.5 self-end">
           <ComposerPrimitive.Cancel render={<Button variant="ghost" size="sm" className="h-8 rounded-full px-3.5" />}>
@@ -599,6 +605,22 @@ const BranchPicker: FC<BranchPickerPrimitive.Root.Props> = ({ className, ...rest
         <ChevronRightIcon />
       </BranchPickerPrimitive.Next>
     </BranchPickerPrimitive.Root>
+  );
+};
+
+const ComposerDirectiveChip: FC<DirectiveChipProps> = ({ directiveId, directiveType, label }) => {
+  return (
+    <Badge
+      variant="info"
+      size="sm"
+      data-directive-type={directiveType}
+      data-directive-id={directiveId}
+      aria-label={`${directiveType}: ${label}`}
+      className="aui-directive-chip mx-0.5 items-baseline align-baseline text-[13px] leading-none [&_svg]:self-center"
+    >
+      <WrenchIcon />
+      {label}
+    </Badge>
   );
 };
 

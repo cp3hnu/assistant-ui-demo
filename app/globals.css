@@ -170,6 +170,40 @@
     font-optical-sizing: auto;
   }
 }
+
+/* Lexical composer: placeholder + contenteditable */
+.aui-lexical-editor {
+  position: relative;
+}
+
+.aui-lexical-input {
+  outline: none;
+  caret-color: var(--primary);
+}
+
+.aui-lexical-editor > [aria-hidden] {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.aui-lexical-placeholder {
+  color: color-mix(in oklab, var(--muted-foreground) 60%, transparent);
+  user-select: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aui-composer-input .aui-lexical-input,
+.aui-composer-input .aui-lexical-placeholder {
+  padding: 0.25rem 0.625rem;
+}
+
+.aui-edit-composer-input .aui-lexical-input,
+.aui-edit-composer-input .aui-lexical-placeholder {
+  padding: 0.75rem 1rem 0.25rem;
+}
   [data-aui] {
     box-sizing: border-box;}
   [data-aui="header"] {
